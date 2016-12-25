@@ -19,6 +19,7 @@ package com.github.athenaeventengine.events;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.github.athenaeventengine.events.config.TvTEventConfig;
 import com.github.u3games.eventengine.builders.TeamsBuilder;
 import com.github.u3games.eventengine.config.BaseConfigLoader;
 import com.github.u3games.eventengine.datatables.MessageData;
@@ -30,7 +31,6 @@ import com.github.u3games.eventengine.enums.ScoreType;
 import com.github.u3games.eventengine.events.handler.AbstractEvent;
 import com.github.u3games.eventengine.events.holders.PlayerHolder;
 import com.github.u3games.eventengine.events.holders.TeamHolder;
-import com.github.u3games.eventengine.events.types.teamvsteam.TvTEventConfig;
 import com.github.u3games.eventengine.util.EventUtil;
 import com.github.u3games.eventengine.util.SortUtils;
 import com.l2jserver.gameserver.model.actor.L2Character;
@@ -41,18 +41,14 @@ import java.util.List;
 /**
  * @author fissban
  */
-public class TeamVsTeam extends AbstractEvent
+public class TeamVsTeam extends AbstractEvent<TvTEventConfig>
 {
     // Time for resurrection
     private static final int TIME_RES_PLAYER = 10;
 
-    public TeamVsTeam()
-    {
-        super(getConfig().getInstanceFile());
-    }
-
-    private static TvTEventConfig getConfig() {
-        return BaseConfigLoader.getInstance().getTvTConfig();
+    @Override
+    protected String getInstanceFile() {
+        return getConfig().getInstanceFile();
     }
 
     @Override
