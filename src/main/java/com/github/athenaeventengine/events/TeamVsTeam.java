@@ -19,21 +19,21 @@ package com.github.athenaeventengine.events;
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.github.athenaengine.core.builders.TeamsBuilder;
+import com.github.athenaengine.core.config.BaseConfigLoader;
+import com.github.athenaengine.core.datatables.MessageData;
+import com.github.athenaengine.core.dispatcher.events.OnDeathEvent;
+import com.github.athenaengine.core.dispatcher.events.OnKillEvent;
+import com.github.athenaengine.core.enums.CollectionTarget;
+import com.github.athenaengine.core.enums.ListenerType;
+import com.github.athenaengine.core.enums.ScoreType;
+import com.github.athenaengine.core.events.holders.TeamHolder;
+import com.github.athenaengine.core.model.base.BaseEvent;
+import com.github.athenaengine.core.model.entity.Character;
+import com.github.athenaengine.core.model.entity.Player;
+import com.github.athenaengine.core.util.EventUtil;
+import com.github.athenaengine.core.util.SortUtils;
 import com.github.athenaeventengine.events.config.TvTEventConfig;
-import com.github.u3games.eventengine.builders.TeamsBuilder;
-import com.github.u3games.eventengine.config.BaseConfigLoader;
-import com.github.u3games.eventengine.datatables.MessageData;
-import com.github.u3games.eventengine.dispatcher.events.OnDeathEvent;
-import com.github.u3games.eventengine.dispatcher.events.OnKillEvent;
-import com.github.u3games.eventengine.enums.CollectionTarget;
-import com.github.u3games.eventengine.enums.ListenerType;
-import com.github.u3games.eventengine.enums.ScoreType;
-import com.github.u3games.eventengine.events.handler.AbstractEvent;
-import com.github.u3games.eventengine.events.holders.PlayerHolder;
-import com.github.u3games.eventengine.events.holders.TeamHolder;
-import com.github.u3games.eventengine.util.EventUtil;
-import com.github.u3games.eventengine.util.SortUtils;
-import com.l2jserver.gameserver.model.actor.L2Character;
 import com.l2jserver.gameserver.network.clientpackets.Say2;
 
 import java.util.List;
@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * @author fissban
  */
-public class TeamVsTeam extends AbstractEvent<TvTEventConfig>
+public class TeamVsTeam extends BaseEvent<TvTEventConfig>
 {
     // Time for resurrection
     private static final int TIME_RES_PLAYER = 10;
@@ -83,16 +83,16 @@ public class TeamVsTeam extends AbstractEvent<TvTEventConfig>
     @Override
     public void onKill(OnKillEvent event)
     {
-        PlayerHolder ph = getPlayerEventManager().getEventPlayer(event.getAttacker());
-        L2Character target = event.getTarget();
+        Player ph = getPlayerEventManager().getEventPlayer(event.getAttacker());
+        Character target = event.getTarget();
 
         // We increased the team's points
-        getTeamsManager().getPlayerTeam(ph).increasePoints(1);
+        getTeamsManager().getPlayerTeam(ph).increasePoints(ScoreType.KILL, 1);
 
         // Reward for kills
         if (getConfig().isRewardKillEnabled())
         {
-            giveItems(ph, getConfig().getRewardKill());
+            ph.giveItems(getConfig().getRewardKill());
         }
         // Reward PvP for kills
         if (getConfig().isRewardPvPKillEnabled())
@@ -117,11 +117,11 @@ public class TeamVsTeam extends AbstractEvent<TvTEventConfig>
     @Override
     public void onDeath(OnDeathEvent event)
     {
-        PlayerHolder ph = getPlayerEventManager().getEventPlayer(event.getTarget());
+        Player ph = getPlayerEventManager().getEventPlayer(event.getTarget());
 
-        giveResurrectPlayer(ph, TIME_RES_PLAYER);
+        scheduleRevivePlayer(ph, TIME_RES_PLAYER);
         // Incremented by one the number of deaths Character
-        ph.increaseDeaths();
+        ph.increasePoints(ScoreType.DEATH, 1);
     }
 
     // VARIOUS METHODS -------------------------------------------------
@@ -137,14 +137,14 @@ public class TeamVsTeam extends AbstractEvent<TvTEventConfig>
 
         // Get the teams winner by total points
         List<TeamHolder> teamWinners = SortUtils.getOrdered(getTeamsManager().getAllTeams(), ScoreType.POINT).get(0);
-        for (PlayerHolder ph : getPlayerEventManager().getAllEventPlayers())
+        for (Player ph : getPlayerEventManager().getAllEventPlayers())
         {
             TeamHolder phTeam = getTeamsManager().getPlayerTeam(ph);
             // We deliver rewards
             if (teamWinners.contains(phTeam))
             {
                 // We deliver rewards
-                giveItems(ph, getConfig().getReward());
+                ph.giveItems(getConfig().getReward());
             }
         }
         for (TeamHolder team : getTeamsManager().getAllTeams())
@@ -167,11 +167,11 @@ public class TeamVsTeam extends AbstractEvent<TvTEventConfig>
             sb.append(" | ");
             sb.append(team.getTeamType().name());
             sb.append(" ");
-            sb.append(team.getPoints());
+            sb.append(team.getPoints(ScoreType.KILL));
         }
         sb.append(" | ");
 
-        for (PlayerHolder ph : getPlayerEventManager().getAllEventPlayers())
+        for (Player ph : getPlayerEventManager().getAllEventPlayers())
         {
             EventUtil.sendEventScreenMessage(ph, sb.toString(), 10000);
             // ph.getPcInstance().sendPacket(new EventParticipantStatus(_pointsRed, _pointsBlue));

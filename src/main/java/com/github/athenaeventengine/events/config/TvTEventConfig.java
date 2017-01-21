@@ -1,9 +1,9 @@
 package com.github.athenaeventengine.events.config;
 
-import com.github.u3games.eventengine.config.interfaces.EventConfig;
-import com.github.u3games.eventengine.config.model.TeamConfig;
-import com.github.u3games.eventengine.model.EItemHolder;
-import com.github.u3games.eventengine.util.ConvertUtils;
+import com.github.athenaengine.core.config.interfaces.EventConfig;
+import com.github.athenaengine.core.config.model.TeamConfig;
+import com.github.athenaengine.core.model.EItemHolder;
+import com.github.athenaengine.core.util.ConvertUtils;
 import com.l2jserver.gameserver.model.holders.ItemHolder;
 
 import java.util.List;
