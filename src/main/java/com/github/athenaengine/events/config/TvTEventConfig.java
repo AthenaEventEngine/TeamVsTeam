@@ -1,10 +1,8 @@
-package com.github.athenaeventengine.events.config;
+package com.github.athenaengine.events.config;
 
 import com.github.athenaengine.core.config.interfaces.EventConfig;
 import com.github.athenaengine.core.config.model.TeamConfig;
 import com.github.athenaengine.core.model.EItemHolder;
-import com.github.athenaengine.core.util.ConvertUtils;
-import com.l2jserver.gameserver.model.holders.ItemHolder;
 
 import java.util.List;
 
@@ -33,8 +31,8 @@ public class TvTEventConfig implements EventConfig {
         return rewardKillEnabled;
     }
 
-    public List<ItemHolder> getRewardKill() {
-        return ConvertUtils.convertToListItemsHolders(rewardKill);
+    public List<EItemHolder> getRewardKill() {
+        return rewardKill;
     }
 
     public boolean isRewardPvPKillEnabled() {
@@ -53,8 +51,8 @@ public class TvTEventConfig implements EventConfig {
         return rewardFameKill;
     }
 
-    public List<ItemHolder> getReward() {
-        return ConvertUtils.convertToListItemsHolders(reward);
+    public List<EItemHolder> getReward() {
+        return reward;
     }
 
     public List<TeamConfig> getTeams() {

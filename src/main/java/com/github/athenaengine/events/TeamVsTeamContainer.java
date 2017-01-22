@@ -1,9 +1,9 @@
-package com.github.athenaeventengine.events;
+package com.github.athenaengine.events;
 
 import com.github.athenaengine.core.config.interfaces.EventConfig;
 import com.github.athenaengine.core.model.base.BaseEvent;
 import com.github.athenaengine.core.model.base.BaseEventContainer;
-import com.github.athenaeventengine.events.config.TvTEventConfig;
+import com.github.athenaengine.events.config.TvTEventConfig;
 
 public class TeamVsTeamContainer extends BaseEventContainer {
 

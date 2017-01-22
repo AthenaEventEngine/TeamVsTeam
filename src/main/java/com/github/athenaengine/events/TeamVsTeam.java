@@ -1,4 +1,4 @@
-package com.github.athenaeventengine.events;
+package com.github.athenaengine.events;
 
 /*
  * Copyright (C) 2015-2016 L2J EventEngine
@@ -26,6 +26,7 @@ import com.github.athenaengine.core.dispatcher.events.OnDeathEvent;
 import com.github.athenaengine.core.dispatcher.events.OnKillEvent;
 import com.github.athenaengine.core.enums.CollectionTarget;
 import com.github.athenaengine.core.enums.ListenerType;
+import com.github.athenaengine.core.enums.MessageType;
 import com.github.athenaengine.core.enums.ScoreType;
 import com.github.athenaengine.core.events.holders.TeamHolder;
 import com.github.athenaengine.core.model.base.BaseEvent;
@@ -33,8 +34,7 @@ import com.github.athenaengine.core.model.entity.Character;
 import com.github.athenaengine.core.model.entity.Player;
 import com.github.athenaengine.core.util.EventUtil;
 import com.github.athenaengine.core.util.SortUtils;
-import com.github.athenaeventengine.events.config.TvTEventConfig;
-import com.l2jserver.gameserver.network.clientpackets.Say2;
+import com.github.athenaengine.events.config.TvTEventConfig;
 
 import java.util.List;
 
@@ -97,14 +97,14 @@ public class TeamVsTeam extends BaseEvent<TvTEventConfig>
         // Reward PvP for kills
         if (getConfig().isRewardPvPKillEnabled())
         {
-            ph.getPcInstance().setPvpKills(ph.getPcInstance().getPvpKills() + getConfig().getRewardPvPKill());
-            EventUtil.sendEventMessage(ph, MessageData.getInstance().getMsgByLang(ph.getPcInstance(), "reward_text_pvp", true).replace("%count%", getConfig().getRewardPvPKill() + ""));
+            ph.setPvpKills(ph.getPvpKills() + getConfig().getRewardPvPKill());
+            EventUtil.sendEventMessage(ph, MessageData.getInstance().getMsgByLang(ph, "reward_text_pvp", true).replace("%count%", getConfig().getRewardPvPKill() + ""));
         }
         // Reward fame for kills
         if (getConfig().isRewardFameKillEnabled())
         {
-            ph.getPcInstance().setFame(ph.getPcInstance().getFame() + getConfig().getRewardFameKill());
-            EventUtil.sendEventMessage(ph, MessageData.getInstance().getMsgByLang(ph.getPcInstance(), "reward_text_fame", true).replace("%count%", getConfig().getRewardFameKill() + ""));
+            ph.setFame(ph.getFame() + getConfig().getRewardFameKill());
+            EventUtil.sendEventMessage(ph, MessageData.getInstance().getMsgByLang(ph, "reward_text_fame", true).replace("%count%", getConfig().getRewardFameKill() + ""));
         }
         // Message Kill
         if (BaseConfigLoader.getInstance().getMainConfig().isKillerMessageEnabled())
@@ -136,12 +136,11 @@ public class TeamVsTeam extends BaseEvent<TvTEventConfig>
         }
 
         // Get the teams winner by total points
-        List<TeamHolder> teamWinners = SortUtils.getOrdered(getTeamsManager().getAllTeams(), ScoreType.POINT).get(0);
+        List<TeamHolder> teamWinners = SortUtils.getOrdered(getTeamsManager().getAllTeams(), ScoreType.KILL).get(0);
         for (Player ph : getPlayerEventManager().getAllEventPlayers())
         {
-            TeamHolder phTeam = getTeamsManager().getPlayerTeam(ph);
             // We deliver rewards
-            if (teamWinners.contains(phTeam))
+            if (teamWinners.contains(ph.getTeam()))
             {
                 // We deliver rewards
                 ph.giveItems(getConfig().getReward());
@@ -151,7 +150,7 @@ public class TeamVsTeam extends BaseEvent<TvTEventConfig>
         {
             if (teamWinners.contains(team))
             {
-                EventUtil.announceTo(Say2.BATTLEFIELD, "team_winner", "%holder%", team.getTeamType().name(), CollectionTarget.ALL_PLAYERS_IN_EVENT);
+                EventUtil.announceTo(MessageType.BATTLEFIELD, "team_winner", "%holder%", team.getTeamType().name(), CollectionTarget.ALL_PLAYERS_IN_EVENT);
             }
         }
     }

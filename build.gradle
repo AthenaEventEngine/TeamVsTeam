@@ -1,4 +1,4 @@
-group 'com.github.athenaeventengine'
+group 'com.github.athenaengine'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
@@ -14,7 +14,6 @@ repositories {
 
 dependencies {
     compile name: 'L2J_EventEngine'
-    compile name: 'l2jserver'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
@@ -24,7 +23,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'com.github.athenaeventengine.events.TeamVsTeamContainer'
+                'Main-Class': 'com.github.athenaengine.events.TeamVsTeamContainer'
     }
     archiveName = 'TeamVsTeam.jar'
 }
