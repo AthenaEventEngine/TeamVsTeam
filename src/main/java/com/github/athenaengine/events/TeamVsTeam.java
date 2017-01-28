@@ -24,6 +24,7 @@ import com.github.athenaengine.core.config.BaseConfigLoader;
 import com.github.athenaengine.core.datatables.MessageData;
 import com.github.athenaengine.core.dispatcher.events.OnDeathEvent;
 import com.github.athenaengine.core.dispatcher.events.OnKillEvent;
+import com.github.athenaengine.core.enums.AnnounceType;
 import com.github.athenaengine.core.enums.ListenerType;
 import com.github.athenaengine.core.enums.ScoreType;
 import com.github.athenaengine.core.helper.RewardHelper;
@@ -114,7 +115,7 @@ public class TeamVsTeam extends BaseEvent<TvTEventConfig> {
                 .setScoreType(ScoreType.KILL)
                 .addReward(1, getConfig().getReward())
                 .setParticipants(getTeamsManager().getAllTeams())
-                .distribute(true);
+                .distribute(AnnounceType.WINNER);
     }
 
     private void showPoint(Team team) {
