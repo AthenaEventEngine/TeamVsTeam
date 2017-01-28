@@ -1,6 +1,6 @@
 package com.github.athenaengine.events;
 
-import com.github.athenaengine.core.config.interfaces.EventConfig;
+import com.github.athenaengine.core.interfaces.IEventConfig;
 import com.github.athenaengine.core.model.base.BaseEvent;
 import com.github.athenaengine.core.model.base.BaseEventContainer;
 import com.github.athenaengine.events.config.TvTEventConfig;
@@ -8,7 +8,7 @@ import com.github.athenaengine.events.config.TvTEventConfig;
 public class TeamVsTeamContainer extends BaseEventContainer {
 
     @Override
-    protected Class<? extends EventConfig> getConfigClass() {
+    protected Class<? extends IEventConfig> getConfigClass() {
         return TvTEventConfig.class;
     }
 

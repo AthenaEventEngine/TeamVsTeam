@@ -1,12 +1,12 @@
 package com.github.athenaengine.events.config;
 
-import com.github.athenaengine.core.config.interfaces.EventConfig;
-import com.github.athenaengine.core.config.model.TeamConfig;
-import com.github.athenaengine.core.model.EItemHolder;
+import com.github.athenaengine.core.interfaces.IEventConfig;
+import com.github.athenaengine.core.model.config.TeamConfig;
+import com.github.athenaengine.core.model.holder.EItemHolder;
 
 import java.util.List;
 
-public class TvTEventConfig implements EventConfig {
+public class TvTEventConfig implements IEventConfig {
 
     private boolean enabled;
     private String instanceFile;
