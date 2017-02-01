@@ -25,5 +25,5 @@ jar {
                 'Built-JDK': System.getProperty('java.version'),
                 'Main-Class': 'com.github.athenaengine.events.TeamVsTeamContainer'
     }
-    archiveName = 'TeamVsTeam.jar'
+    archiveName = 'TeamVsTeam-' + version + '.jar'
 }
